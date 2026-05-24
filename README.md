@@ -22,15 +22,16 @@ Investment portfolio tracker — record your asset purchases and sales.
 
 - Node.js `^20.19.0` or `>=22.12.0`
 - Docker (required by Supabase CLI for local dev)
+- [ppnpm](https://ppnpm.io/installation) `>=9`
 - [Supabase CLI](https://supabase.com/docs/guides/cli) — installed as devDependency
 
 ## Getting Started
 
 ```bash
-npm install
+pnpm install
 cp .env.example .env
 # Edit .env with your Supabase credentials
-npm run dev
+pnpm run dev
 # → http://localhost:5173
 ```
 
@@ -60,25 +61,25 @@ VITE_SUPABASE_ANON_KEY=eyJhbGciOi...
 
 |                    | Dev (local)                            | Prod (cloud)                    |
 | ------------------ | -------------------------------------- | ------------------------------- |
-| **Where**          | `npm run db:start` (Docker containers) | Supabase cloud project          |
+| **Where**          | `pnpm run db:start` (Docker containers) | Supabase cloud project          |
 | **PostgreSQL**     | `localhost:54322`                      | `<project>.supabase.co`         |
 | **Studio UI**      | `http://localhost:54323`               | Supabase Dashboard              |
-| **Schema changes** | `npm run db:migrate:up`                | `npm run db:push`               |
-| **Full reset**     | `npm run db:reset`                     | ❌ never on prod                |
+| **Schema changes** | `pnpm run db:migrate:up`                | `pnpm run db:push`               |
+| **Full reset**     | `pnpm run db:reset`                     | ❌ never on prod                |
 | **Seed data**      | Automatic with`db:reset`               | Manual via Dashboard SQL Editor |
 
 ### Dev workflow
 
 ```bash
-npm run db:start         # Start local Supabase (PostgreSQL + Studio + Auth)
-npm run db:reset         # Apply migrations + seed (27 assets)
-npm run dev              # Frontend → http://localhost:5173
+pnpm run db:start         # Start local Supabase (PostgreSQL + Studio + Auth)
+pnpm run db:reset         # Apply migrations + seed (27 assets)
+pnpm run dev              # Frontend → http://localhost:5173
 
 # After changing the schema:
-npm run db:migrate:new -- add_column   # Create empty migration file
+pnpm run db:migrate:new -- add_column   # Create empty migration file
 # ... write your SQL in supabase/migrations/<timestamp>_add_column.sql ...
-npm run db:migrate:up                  # Apply to local DB
-npm run db:reset                       # Verify full reset still works
+pnpm run db:migrate:up                  # Apply to local DB
+pnpm run db:reset                       # Verify full reset still works
 ```
 
 ### Prod workflow
@@ -91,7 +92,7 @@ npx supabase login
 npx supabase link --project-ref <prod-project-id>
 
 # Deploy migrations
-npm run db:push
+pnpm run db:push
 
 # First time on a new project, also run the seed:
 # Dashboard → SQL Editor → paste supabase/seed.sql
@@ -115,27 +116,27 @@ Connection string: `postgresql://postgres:postgres@localhost:54322/postgres`
 
 | Command              | Description                         |
 | -------------------- | ----------------------------------- |
-| `npm run dev`        | Dev server with HMR                 |
-| `npm run build`      | TypeScript check + production build |
-| `npm run preview`    | Preview production build            |
-| `npm run test`       | Run tests once                      |
-| `npm run test:watch` | Run tests in watch mode             |
-| `npm run lint`       | Lint with ESLint                    |
-| `npm run format`     | Format with Prettier                |
+| `pnpm run dev`        | Dev server with HMR                 |
+| `pnpm run build`      | TypeScript check + production build |
+| `pnpm run preview`    | Preview production build            |
+| `pnpm run test`       | Run tests once                      |
+| `pnpm run test:watch` | Run tests in watch mode             |
+| `pnpm run lint`       | Lint with ESLint                    |
+| `pnpm run format`     | Format with Prettier                |
 
 ### Database
 
 
 | Command                         | Description                                        |
 | ------------------------------- | -------------------------------------------------- |
-| `npm run db:start`              | Start local Supabase stack (Docker)                |
-| `npm run db:stop`               | Stop local Supabase stack                          |
-| `npm run db:reset`              | Reset local DB → apply all migrations → run seed |
-| `npm run db:migrate:new -- <name>` | Create new migration file |
-| `npm run db:migrate:up`         | Apply pending migrations to local DB               |
-| `npm run db:migrate:list`       | Compare local vs remote migration state            |
-| `npm run db:push`               | Deploy migrations to cloud Supabase project        |
-| `npm run db:diff -- <name>` | Generate migration from schema diff |
+| `pnpm run db:start`              | Start local Supabase stack (Docker)                |
+| `pnpm run db:stop`               | Stop local Supabase stack                          |
+| `pnpm run db:reset`              | Reset local DB → apply all migrations → run seed |
+| `pnpm run db:migrate:new -- <name>` | Create new migration file |
+| `pnpm run db:migrate:up`         | Apply pending migrations to local DB               |
+| `pnpm run db:migrate:list`       | Compare local vs remote migration state            |
+| `pnpm run db:push`               | Deploy migrations to cloud Supabase project        |
+| `pnpm run db:diff -- <name>` | Generate migration from schema diff |
 
 ## Database Schema
 
