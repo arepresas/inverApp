@@ -5,15 +5,20 @@ import { useTransactionStore } from '@/stores/transactions'
 import TransactionForm from '@/components/TransactionForm.vue'
 import AppHeader from '@/components/AppHeader.vue'
 
+function safeQuery(value: unknown): string {
+  if (Array.isArray(value)) return String(value[0] ?? '')
+  return String(value ?? '')
+}
+
 const route = useRoute()
 const router = useRouter()
 const tx = useTransactionStore()
 
 const preselected = route.query.asset_id
   ? {
-      asset_id: String(route.query.asset_id),
-      symbol: String(route.query.symbol ?? ''),
-      name: String(route.query.name ?? ''),
+      asset_id: safeQuery(route.query.asset_id),
+      symbol: safeQuery(route.query.symbol),
+      name: safeQuery(route.query.name),
     }
   : undefined
 

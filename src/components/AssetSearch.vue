@@ -36,11 +36,13 @@ watch(search, (value) => {
 
 async function fetchAssets(query: string) {
   loading.value = true
+  // Escape LIKE wildcards to prevent unexpected matches
+  const safe = query.replace(/[%_\\]/g, '\\$&')
   try {
     const { data, error: err } = await supabase
       .from('assets')
       .select('id, symbol, name, asset_type, currency')
-      .or(`symbol.ilike.%${query}%,name.ilike.%${query}%`)
+      .or(`symbol.ilike.%${safe}%,name.ilike.%${safe}%`)
       .eq('active', true)
       .order('symbol')
       .limit(10)
