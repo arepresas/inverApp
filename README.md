@@ -22,7 +22,7 @@ Investment portfolio tracker — record your asset purchases and sales.
 
 - Node.js `^20.19.0` or `>=22.12.0`
 - Docker (required by Supabase CLI for local dev)
-- [ppnpm](https://ppnpm.io/installation) `>=9`
+- [pnpm](https://pnpm.io/installation) `>=9`
 - [Supabase CLI](https://supabase.com/docs/guides/cli) — installed as devDependency
 
 ## Getting Started
