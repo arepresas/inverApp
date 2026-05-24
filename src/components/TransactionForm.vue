@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { MField, MTextInput, MButton } from '@mozaic-ds/vue'
+import { ref, computed, watch, onMounted } from 'vue'
+import { MField, MTextInput, MButton, MDatepicker } from '@mozaic-ds/vue'
 import AssetSearch from './AssetSearch.vue'
+import { fetchPrices } from '@/lib/yahoo'
 
 type SelectedAsset = { symbol: string; name: string; asset_type: string; currency: string }
 
 const props = defineProps<{
   mode: 'buy' | 'sell'
   maxQuantity?: number
-  preselectedAsset?: { asset_id: string; symbol: string; name: string }
+  preselectedAsset?: { asset_id?: string; symbol: string; name: string; asset_type?: string; currency?: string }
 }>()
 
 const emit = defineEmits<{
@@ -28,16 +29,38 @@ const emit = defineEmits<{
 }>()
 
 const selectedAsset = ref<SelectedAsset | null>(null)
+
+// Auto-fill price with current market price when asset is selected
+watch(selectedAsset, async (asset) => {
+  if (!asset) return
+  try {
+    const prices = await fetchPrices([asset.symbol])
+    if (prices[asset.symbol] != null) {
+      price.value = String(prices[asset.symbol])
+    }
+  } catch {
+    // Silently ignore — user can enter price manually
+  }
+})
+
+// Auto-fill price and quantity for preselected asset (sell from dashboard)
+onMounted(async () => {
+  if (props.preselectedAsset) {
+    const prices = await fetchPrices([props.preselectedAsset.symbol])
+    if (prices[props.preselectedAsset.symbol] != null) {
+      price.value = String(prices[props.preselectedAsset.symbol])
+    }
+  }
+  // Auto-fill max quantity in sell mode
+  if (props.mode === 'sell' && props.maxQuantity != null) {
+    quantity.value = String(props.maxQuantity)
+  }
+})
+
 const quantity = ref('')
 const price = ref('')
 const fees = ref('0')
-function localDateTime() {
-  const now = new Date()
-  const tzOffset = now.getTimezoneOffset() * 60000
-  const local = new Date(now.getTime() - tzOffset)
-  return local.toISOString().slice(0, 16)
-}
-const date = ref(localDateTime())
+const date = ref(new Date().toISOString().slice(0, 10))
 const qtyError = ref('')
 const priceError = ref('')
 const assetError = ref('')
@@ -86,8 +109,8 @@ function handleSubmit() {
     emit('submit', {
       symbol: props.preselectedAsset.symbol,
       name: props.preselectedAsset.name,
-      asset_type: 'stock',
-      currency: 'USD',
+      asset_type: props.preselectedAsset.asset_type || 'stock',
+      currency: props.preselectedAsset.currency || 'USD',
       asset_id: props.preselectedAsset.asset_id,
       transaction_type: props.mode,
       quantity: Number(quantity.value),
@@ -170,7 +193,7 @@ const total = computed(() => {
 
     <!-- Date -->
     <MField id="tx-date" label="Date" :message="dateError" :is-invalid="!!dateError">
-      <MTextInput id="tx-date" v-model="date" input-type="datetime-local" :is-invalid="!!dateError" />
+      <MDatepicker id="tx-date" v-model="date" />
     </MField>
 
     <!-- Total preview -->

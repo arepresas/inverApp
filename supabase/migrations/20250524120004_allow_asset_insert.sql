@@ -7,7 +7,7 @@
 drop policy if exists "Service role can manage assets" on public.assets;
 
 -- Allow authenticated users to insert new assets discovered via search.
--- Requires valid symbol, name, and asset_type.
+-- Requires valid symbol and name.
 create policy "Authenticated users can insert assets"
   on public.assets for insert
   to authenticated
@@ -17,6 +17,12 @@ create policy "Authenticated users can insert assets"
     and name is not null
     and length(name) > 0
   );
+
+-- Allow service_role to insert assets as well
+create policy "Service role can insert assets"
+  on public.assets for insert
+  to service_role
+  with check (true);
 
 -- Keep service_role as the only role that can update/delete
 create policy "Service role can update assets"

@@ -1,17 +1,25 @@
 <script setup lang="ts">
-import { MButton, MTile } from '@mozaic-ds/vue'
+import { MButton, MTile, MLoader } from '@mozaic-ds/vue'
 import { useRouter } from 'vue-router'
 import { MDataTable } from '@mozaic-ds/datatable-vue'
 import '@mozaic-ds/datatable-vue/style.css'
 import type { PortfolioRow } from '@/types/portfolio'
 
+type EnrichedRow = PortfolioRow & {
+  currentPrice: number | null
+  currentValue: number | null
+  unrealizedPnl: number | null
+}
+
 const router = useRouter()
 
 defineProps<{
-  holdings: PortfolioRow[]
+  holdings: EnrichedRow[]
+  pricesLoading?: boolean
 }>()
 
 const emit = defineEmits<{
+  buy: [asset: PortfolioRow]
   sell: [asset: PortfolioRow]
 }>()
 
@@ -20,7 +28,9 @@ const headers = [
   { label: 'Name', value: 'name' },
   { label: 'Quantity', value: 'quantity' },
   { label: 'Avg Cost', value: 'average_cost' },
-  { label: 'Invested', value: 'total_invested' },
+  { label: 'Price', value: 'currentPrice' },
+  { label: 'Value', value: 'currentValue' },
+  { label: 'P&L', value: 'unrealizedPnl' },
   { label: '', value: 'actions', sortable: false },
 ]
 
@@ -29,6 +39,7 @@ function formatCurrency(value: number, currency: string) {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(value)
 }
 
@@ -37,6 +48,13 @@ function formatQuantity(value: number) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 8,
   }).format(value)
+}
+
+function pnlClass(value: number | null) {
+  if (value == null) return 'portfolio-pnl--none'
+  if (value > 0) return 'portfolio-pnl--gain'
+  if (value < 0) return 'portfolio-pnl--loss'
+  return 'portfolio-pnl--none'
 }
 </script>
 
@@ -50,20 +68,41 @@ function formatQuantity(value: number) {
     </div>
   </MTile>
 
-  <MDataTable v-else :items="holdings" :headers="headers">
-    <template #cell.quantity="{ item }">
-      {{ formatQuantity(item.quantity) }}
-    </template>
-    <template #cell.average_cost="{ item }">
-      {{ formatCurrency(item.average_cost, item.currency) }}
-    </template>
-    <template #cell.total_invested="{ item }">
-      {{ formatCurrency(item.total_invested, item.currency) }}
-    </template>
-    <template #cell.actions="{ item }">
-      <MButton variant="secondary" size="s" @click="emit('sell', item)">Sell</MButton>
-    </template>
-  </MDataTable>
+  <div v-else>
+    <MLoader v-if="pricesLoading" size="s" text="Fetching prices..." class="portfolio-prices-loader" />
+
+    <MDataTable :items="holdings" :headers="headers">
+      <template #cell.quantity="{ item }">
+        {{ formatQuantity(item.quantity) }}
+      </template>
+      <template #cell.average_cost="{ item }">
+        {{ formatCurrency(item.average_cost, item.currency) }}
+      </template>
+      <template #cell.currentPrice="{ item }">
+        <span v-if="item.currentPrice != null">
+          {{ formatCurrency(item.currentPrice, item.currency) }}
+        </span>
+        <span v-else class="portfolio-pnl--none">—</span>
+      </template>
+      <template #cell.currentValue="{ item }">
+        <span v-if="item.currentValue != null">
+          {{ formatCurrency(item.currentValue, item.currency) }}
+        </span>
+        <span v-else class="portfolio-pnl--none">—</span>
+      </template>
+      <template #cell.unrealizedPnl="{ item }">
+        <span :class="pnlClass(item.unrealizedPnl)">
+          {{ item.unrealizedPnl != null ? formatCurrency(item.unrealizedPnl, item.currency) : '—' }}
+        </span>
+      </template>
+      <template #cell.actions="{ item }">
+        <div class="portfolio-actions">
+          <MButton variant="secondary" size="s" @click="emit('buy', item)">Buy</MButton>
+          <MButton variant="secondary" size="s" @click="emit('sell', item)">Sell</MButton>
+        </div>
+      </template>
+    </MDataTable>
+  </div>
 </template>
 
 <style scoped>
@@ -89,5 +128,28 @@ function formatQuantity(value: number) {
   margin: 0;
   font-size: 0.875rem;
   color: var(--mu-color-text-secondary, #64748b);
+}
+
+.portfolio-prices-loader {
+  margin-bottom: 0.75rem;
+}
+
+.portfolio-actions {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.portfolio-pnl--gain {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.portfolio-pnl--loss {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.portfolio-pnl--none {
+  color: var(--mu-color-text-secondary, #94a3b8);
 }
 </style>

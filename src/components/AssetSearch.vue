@@ -76,7 +76,7 @@ function handleBlur() {
     <ul v-if="open && results.length" class="asset-search__dropdown">
       <li
         v-for="(item, idx) in results"
-        :key="idx"
+        :key="item.symbol + '-' + idx"
         class="asset-search__option"
         @mousedown.prevent="selectResult(item)"
       >

@@ -28,6 +28,7 @@ function isActive(path: string) {
       <nav class="app-header__nav">
         <router-link to="/dashboard" class="app-header__link" :class="{ 'app-header__link--active': isActive('/dashboard') }">Dashboard</router-link>
         <router-link to="/buy" class="app-header__link" :class="{ 'app-header__link--active': isActive('/buy') }">Buy</router-link>
+        <router-link to="/transactions" class="app-header__link" :class="{ 'app-header__link--active': isActive('/transactions') }">History</router-link>
       </nav>
       <span class="app-header__email">{{ auth.user.email }}</span>
       <MButton variant="secondary" size="s" @click="handleLogout">Logout</MButton>

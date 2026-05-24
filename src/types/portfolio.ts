@@ -8,6 +8,9 @@ export interface PortfolioRow {
   quantity: number
   average_cost: number
   total_invested: number
+  currentPrice?: number | null
+  currentValue?: number | null
+  unrealizedPnl?: number | null
 }
 
 export interface Asset {

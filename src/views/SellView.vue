@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import { MStatusNotification } from '@mozaic-ds/vue'
 import { useTransactionStore } from '@/stores/transactions'
 import TransactionForm from '@/components/TransactionForm.vue'
@@ -13,6 +14,10 @@ function safeQuery(value: unknown): string {
 const route = useRoute()
 const router = useRouter()
 const tx = useTransactionStore()
+
+onMounted(() => {
+  tx.clearMessages()
+})
 
 const preselected = route.query.asset_id
   ? {
@@ -38,6 +43,9 @@ async function handleSubmit(input: {
   asset_id?: string
 }) {
   await tx.addTransaction(input)
+  if (!tx.error) {
+    router.push('/dashboard')
+  }
 }
 
 function handleCancel() {

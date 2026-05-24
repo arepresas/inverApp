@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { MLoader, MStatusNotification, MTile } from '@mozaic-ds/vue'
 import { usePortfolioStore } from '@/stores/portfolio'
@@ -10,9 +10,23 @@ import type { PortfolioRow } from '@/types/portfolio'
 const portfolio = usePortfolioStore()
 const router = useRouter()
 
-onMounted(() => {
-  portfolio.fetchPortfolio()
+onMounted(async () => {
+  await portfolio.fetchPortfolio()
+  portfolio.fetchMarketPrices()
+  portfolio.fetchRealizedPnl()
 })
+
+function handleBuy(asset: PortfolioRow) {
+  router.push({
+    name: 'buy',
+    query: {
+      symbol: asset.symbol,
+      name: asset.name,
+      asset_type: asset.asset_type,
+      currency: asset.currency,
+    },
+  })
+}
 
 function handleSell(asset: PortfolioRow) {
   router.push({
@@ -26,12 +40,24 @@ function handleSell(asset: PortfolioRow) {
   })
 }
 
-function formatCurrency(value: number, currency = 'EUR') {
+function formatCurrency(value: number, currency = 'USD') {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency,
     minimumFractionDigits: 0,
   }).format(value)
+}
+
+function formatRealizedPnl() {
+  const byCurrency = portfolio.realizedPnlByCurrency
+  if (!Object.keys(byCurrency).length) return formatCurrency(0)
+  if (Object.keys(byCurrency).length === 1) {
+    const [cur, val] = Object.entries(byCurrency)[0]
+    return formatCurrency(val, cur)
+  }
+  return Object.entries(byCurrency)
+    .map(([cur, val]) => formatCurrency(val, cur))
+    .join(' + ')
 }
 
 function formatInvested() {
@@ -43,6 +69,20 @@ function formatInvested() {
   return Object.entries(byCurrency)
     .map(([cur, val]) => formatCurrency(val, cur))
     .join(' + ')
+}
+
+const currentValue = computed(() =>
+  portfolio.enrichedHoldings.reduce((sum, h) => sum + (h.currentValue ?? 0), 0),
+)
+
+const unrealizedPnl = computed(() =>
+  portfolio.enrichedHoldings.reduce((sum, h) => sum + (h.unrealizedPnl ?? 0), 0),
+)
+
+function pnlValueClass(value: number) {
+  if (value > 0) return 'dashboard__card-value--gain'
+  if (value < 0) return 'dashboard__card-value--loss'
+  return ''
 }
 </script>
 
@@ -67,22 +107,40 @@ function formatInvested() {
           <MTile bordered class="dashboard__card">
             <span class="dashboard__card-icon">💰</span>
             <div>
-              <span class="dashboard__card-value">{{ formatInvested() }}</span>
-              <span class="dashboard__card-label">Total Invested</span>
+              <span class="dashboard__card-value">{{ formatCurrency(currentValue) }}</span>
+              <span class="dashboard__card-label">Current Value</span>
+            </div>
+          </MTile>
+          <MTile bordered class="dashboard__card">
+            <span class="dashboard__card-icon">📈</span>
+            <div>
+              <span class="dashboard__card-value" :class="pnlValueClass(unrealizedPnl)">
+                {{ formatCurrency(unrealizedPnl) }}
+              </span>
+              <span class="dashboard__card-label">Unrealized P&L</span>
+            </div>
+          </MTile>
+          <MTile bordered class="dashboard__card">
+            <span class="dashboard__card-icon">💵</span>
+            <div>
+              <span class="dashboard__card-value">{{ formatRealizedPnl() }}</span>
+              <span class="dashboard__card-label">Realized P&L</span>
             </div>
           </MTile>
           <MTile bordered class="dashboard__card">
             <span class="dashboard__card-icon">📦</span>
             <div>
-              <span class="dashboard__card-value">{{ portfolio.holdingsCount }}</span>
-              <span class="dashboard__card-label">Holdings</span>
+              <span class="dashboard__card-value">{{ formatInvested() }}</span>
+              <span class="dashboard__card-label">Total Invested</span>
             </div>
           </MTile>
         </div>
 
         <h2 class="dashboard__heading">Your Portfolio</h2>
         <PortfolioTable
-          :holdings="portfolio.holdings"
+          :holdings="portfolio.enrichedHoldings"
+          :prices-loading="portfolio.pricesLoading"
+          @buy="handleBuy"
           @sell="handleSell"
         />
       </template>
@@ -104,7 +162,7 @@ function formatInvested() {
 
 .dashboard__summary {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 1rem;
   margin-bottom: 2rem;
 }
@@ -124,6 +182,14 @@ function formatInvested() {
   font-size: 1.25rem;
   font-weight: 700;
   color: var(--mu-color-text, #0f172a);
+}
+
+.dashboard__card-value--gain {
+  color: #16a34a;
+}
+
+.dashboard__card-value--loss {
+  color: #dc2626;
 }
 
 .dashboard__card-label {

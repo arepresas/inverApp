@@ -1,12 +1,27 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
+import { onMounted } from 'vue'
 import { MStatusNotification } from '@mozaic-ds/vue'
 import { useTransactionStore } from '@/stores/transactions'
 import TransactionForm from '@/components/TransactionForm.vue'
 import AppHeader from '@/components/AppHeader.vue'
 
-const tx = useTransactionStore()
+const route = useRoute()
 const router = useRouter()
+const tx = useTransactionStore()
+
+onMounted(() => {
+  tx.clearMessages()
+})
+
+const preselected = route.query.symbol
+  ? {
+      symbol: String(route.query.symbol),
+      name: String(route.query.name ?? route.query.symbol),
+      asset_type: String(route.query.asset_type ?? 'stock'),
+      currency: String(route.query.currency ?? 'USD'),
+    }
+  : undefined
 
 async function handleSubmit(input: {
   symbol: string
@@ -21,6 +36,9 @@ async function handleSubmit(input: {
   asset_id?: string
 }) {
   await tx.addTransaction(input)
+  if (!tx.error) {
+    router.push('/dashboard')
+  }
 }
 
 function handleCancel() {
@@ -46,7 +64,7 @@ function handleCancel() {
         description=""
       />
 
-      <TransactionForm mode="buy" @submit="handleSubmit" @cancel="handleCancel" />
+      <TransactionForm mode="buy" :preselected-asset="preselected" @submit="handleSubmit" @cancel="handleCancel" />
     </main>
   </div>
 </template>
