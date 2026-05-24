@@ -12,18 +12,22 @@ export const usePortfolioStore = defineStore('portfolio', () => {
     loading.value = true
     error.value = null
 
-    const { data, error: err } = await supabase
-      .from('portfolio')
-      .select('*')
-      .order('symbol')
+    try {
+      const { data, error: err } = await supabase
+        .from('portfolio')
+        .select('*')
+        .order('symbol')
 
-    if (err) {
-      error.value = err.message
-    } else {
-      holdings.value = (data as PortfolioRow[]) || []
+      if (err) {
+        error.value = err.message
+      } else {
+        holdings.value = (data as PortfolioRow[]) || []
+      }
+    } catch (e) {
+      error.value = e instanceof Error ? e.message : 'Failed to load portfolio'
+    } finally {
+      loading.value = false
     }
-
-    loading.value = false
   }
 
   const totalInvested = computed(() =>

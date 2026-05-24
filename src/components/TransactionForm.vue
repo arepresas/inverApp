@@ -102,7 +102,6 @@ const total = computed(() => {
 
     <!-- Asset selection -->
     <div v-if="!preselectedAsset" class="tx-form__field">
-      <label class="tx-form__label">Asset</label>
       <AssetSearch @select="handleAssetSelect" />
       <p v-if="assetError" class="tx-form__error">{{ assetError }}</p>
     </div>
@@ -116,7 +115,7 @@ const total = computed(() => {
     <!-- Quantity -->
     <MField
       id="tx-qty"
-      :label="`Quantity${mode === 'sell' && maxQuantity ? ' (max ' + maxQuantity + ')' : ''}`"
+      :label="`Quantity${mode === 'sell' && maxQuantity != null ? ' (max ' + maxQuantity + ')' : ''}`"
       :message="qtyError"
       :is-invalid="!!qtyError"
     >

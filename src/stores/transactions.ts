@@ -21,13 +21,10 @@ export const useTransactionStore = defineStore('transactions', () => {
         return
       }
 
-      // Oversell guard for sell transactions
+      // Oversell guard: always fetch fresh portfolio data
       if (input.transaction_type === 'sell') {
-        // Ensure portfolio data is fresh
         const portfolio = usePortfolioStore()
-        if (!portfolio.holdings.length) {
-          await portfolio.fetchPortfolio()
-        }
+        await portfolio.fetchPortfolio()
         const holding = portfolio.holdings.find((h) => h.asset_id === input.asset_id)
         if (!holding || holding.quantity < input.quantity) {
           error.value = `Insufficient quantity. You only have ${holding?.quantity ?? 0} available.`
