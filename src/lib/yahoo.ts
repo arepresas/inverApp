@@ -52,11 +52,12 @@ export async function searchAssets(query: string): Promise<YahooResult[]> {
 export async function upsertAsset(asset: YahooResult): Promise<Asset> {
   const { supabase } = await import('@/lib/supabase')
 
+  // Check if asset already exists (maybeSingle returns null instead of throwing)
   const { data: existing } = await supabase
     .from('assets')
     .select('id')
     .eq('symbol', asset.symbol)
-    .single()
+    .maybeSingle()
 
   if (existing) {
     return { id: existing.id, ...asset, active: true }
