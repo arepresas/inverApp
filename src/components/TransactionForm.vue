@@ -36,6 +36,8 @@ const date = ref(localDateTime())
 const qtyError = ref('')
 const priceError = ref('')
 const assetError = ref('')
+const dateError = ref('')
+const feesError = ref('')
 
 function handleAssetSelect(asset: Asset | null) {
   selectedAsset.value = asset
@@ -46,6 +48,8 @@ function validate(): boolean {
   qtyError.value = ''
   priceError.value = ''
   assetError.value = ''
+  dateError.value = ''
+  feesError.value = ''
 
   if (!selectedAsset.value && !props.preselectedAsset) {
     assetError.value = 'Select an asset'
@@ -59,8 +63,15 @@ function validate(): boolean {
   if (!price.value || Number(price.value) <= 0) {
     priceError.value = 'Enter a valid price'
   }
+  if (Number.isNaN(Number(fees.value)) || Number(fees.value) < 0) {
+    feesError.value = 'Fees must be >= 0'
+  }
+  const parsed = new Date(date.value)
+  if (!date.value || Number.isNaN(parsed.getTime())) {
+    dateError.value = 'Enter a valid date'
+  }
 
-  return !qtyError.value && !priceError.value && !assetError.value
+  return !qtyError.value && !priceError.value && !assetError.value && !dateError.value && !feesError.value
 }
 
 function handleSubmit() {

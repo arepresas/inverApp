@@ -26,12 +26,23 @@ function handleSell(asset: PortfolioRow) {
   })
 }
 
-function formatCurrency(value: number) {
+function formatCurrency(value: number, currency = 'EUR') {
   return new Intl.NumberFormat('en-US', {
     style: 'currency',
-    currency: 'EUR',
+    currency,
     minimumFractionDigits: 0,
   }).format(value)
+}
+
+function formatInvested() {
+  const byCurrency = portfolio.totalInvestedByCurrency
+  if (Object.keys(byCurrency).length === 1) {
+    const [cur, val] = Object.entries(byCurrency)[0]
+    return formatCurrency(val, cur)
+  }
+  return Object.entries(byCurrency)
+    .map(([cur, val]) => formatCurrency(val, cur))
+    .join(' + ')
 }
 </script>
 
@@ -56,8 +67,8 @@ function formatCurrency(value: number) {
           <MTile bordered class="dashboard__card">
             <span class="dashboard__card-icon">💰</span>
             <div>
-              <span class="dashboard__card-value">{{ formatCurrency(portfolio.totalInvested) }}</span>
-              <span class="dashboard__card-label">Total Invested (EUR)</span>
+              <span class="dashboard__card-value">{{ formatInvested() }}</span>
+              <span class="dashboard__card-label">Total Invested</span>
             </div>
           </MTile>
           <MTile bordered class="dashboard__card">
