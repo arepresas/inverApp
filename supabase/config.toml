@@ -1,0 +1,18 @@
+# Supabase CLI Configuration
+# Docs: https://supabase.com/docs/reference/cli/config
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[auth]
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://localhost:5173/**"]
+
+[api]
+port = 54321
+
+[analytics]
+enabled = false

@@ -10,7 +10,15 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint . --ext .vue,.ts",
-    "format": "prettier --write \"src/**/*.{vue,ts,css}\""
+    "format": "prettier --write \"src/**/*.{vue,ts,css}\"",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop",
+    "db:reset": "supabase db reset",
+    "db:migrate:new": "supabase migration new",
+    "db:migrate:up": "supabase migration up",
+    "db:migrate:list": "supabase migration list",
+    "db:push": "supabase db push",
+    "db:diff": "supabase db diff -f"
   },
   "dependencies": {
     "@mozaic-ds/vue": "^2.19.0",
@@ -33,6 +41,7 @@
     "postcss-scss": "^4.0.9",
     "prettier": "^3.8.3",
     "sass": "^1.100.0",
+    "supabase": "^2.101.0",
     "typescript": "~6.0.2",
     "vite": "^8.0.12",
     "vitest": "^4.1.7",
