@@ -11,6 +11,20 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      // Proxy Yahoo Finance API in dev (CORS workaround).
+      // In production, deploy a real proxy (e.g. Cloudflare Worker, Netlify redirect).
+      '/api/yahoo': {
+        target: 'https://query2.finance.yahoo.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/yahoo/, ''),
+        headers: {
+          'User-Agent': 'Mozilla/5.0',
+        },
+      },
+    },
+  },
   css: {
     preprocessorOptions: {
       scss: {

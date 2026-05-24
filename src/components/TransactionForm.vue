@@ -2,7 +2,8 @@
 import { ref, computed } from 'vue'
 import { MField, MTextInput, MButton } from '@mozaic-ds/vue'
 import AssetSearch from './AssetSearch.vue'
-import type { Asset } from '@/types/portfolio'
+
+type SelectedAsset = { symbol: string; name: string; asset_type: string; currency: string }
 
 const props = defineProps<{
   mode: 'buy' | 'sell'
@@ -12,17 +13,21 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   submit: [input: {
-    asset_id: string
+    symbol: string
+    name: string
+    asset_type: string
+    currency: string
     transaction_type: 'buy' | 'sell'
     quantity: number
     price_per_unit: number
     fees: number
     transaction_date: string
+    asset_id?: string
   }]
   cancel: []
 }>()
 
-const selectedAsset = ref<Asset | null>(null)
+const selectedAsset = ref<SelectedAsset | null>(null)
 const quantity = ref('')
 const price = ref('')
 const fees = ref('0')
@@ -39,7 +44,7 @@ const assetError = ref('')
 const dateError = ref('')
 const feesError = ref('')
 
-function handleAssetSelect(asset: Asset | null) {
+function handleAssetSelect(asset: SelectedAsset | null) {
   selectedAsset.value = asset
   assetError.value = ''
 }
@@ -77,11 +82,30 @@ function validate(): boolean {
 function handleSubmit() {
   if (!validate()) return
 
-  const assetId = selectedAsset.value?.id || props.preselectedAsset?.asset_id
-  if (!assetId) return
+  if (props.preselectedAsset) {
+    emit('submit', {
+      symbol: props.preselectedAsset.symbol,
+      name: props.preselectedAsset.name,
+      asset_type: 'stock',
+      currency: 'USD',
+      asset_id: props.preselectedAsset.asset_id,
+      transaction_type: props.mode,
+      quantity: Number(quantity.value),
+      price_per_unit: Number(price.value),
+      fees: Number(fees.value) || 0,
+      transaction_date: new Date(date.value).toISOString(),
+    })
+    return
+  }
+
+  const asset = selectedAsset.value
+  if (!asset) return
 
   emit('submit', {
-    asset_id: assetId,
+    symbol: asset.symbol,
+    name: asset.name,
+    asset_type: asset.asset_type,
+    currency: asset.currency,
     transaction_type: props.mode,
     quantity: Number(quantity.value),
     price_per_unit: Number(price.value),
