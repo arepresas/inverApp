@@ -16,7 +16,7 @@ export interface Asset {
   name: string
   asset_type: string
   currency: string
-  active: boolean
+  active?: boolean
 }
 
 export interface TransactionInput {

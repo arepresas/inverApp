@@ -57,7 +57,7 @@ function validate(): boolean {
   if (!quantity.value || Number(quantity.value) <= 0) {
     qtyError.value = 'Enter a valid quantity'
   }
-  if (props.mode === 'sell' && props.maxQuantity && Number(quantity.value) > props.maxQuantity) {
+  if (props.mode === 'sell' && props.maxQuantity != null && Number(quantity.value) > props.maxQuantity) {
     qtyError.value = `Max ${props.maxQuantity} available`
   }
   if (!price.value || Number(price.value) <= 0) {
@@ -141,13 +141,13 @@ const total = computed(() => {
     </MField>
 
     <!-- Fees -->
-    <MField id="tx-fees" label="Fees">
-      <MTextInput id="tx-fees" v-model="fees" placeholder="0" input-type="number" />
+    <MField id="tx-fees" label="Fees" :message="feesError" :is-invalid="!!feesError">
+      <MTextInput id="tx-fees" v-model="fees" placeholder="0" input-type="number" :is-invalid="!!feesError" />
     </MField>
 
     <!-- Date -->
-    <MField id="tx-date" label="Date">
-      <MTextInput id="tx-date" v-model="date" input-type="datetime-local" />
+    <MField id="tx-date" label="Date" :message="dateError" :is-invalid="!!dateError">
+      <MTextInput id="tx-date" v-model="date" input-type="datetime-local" :is-invalid="!!dateError" />
     </MField>
 
     <!-- Total preview -->
