@@ -31,7 +31,7 @@ function inferAssetType(quoteType?: string): string {
 }
 
 export async function searchAssets(query: string): Promise<YahooResult[]> {
-  const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&lang=en-US&region=US&quotesCount=10&newsCount=0`
+  const url = `/api/yahoo/v1/finance/search?q=${encodeURIComponent(query)}&lang=en-US&region=US&quotesCount=10&newsCount=0`
 
   const res = await fetch(url)
   if (!res.ok) return []
