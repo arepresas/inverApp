@@ -23,7 +23,7 @@ const preselected = route.query.asset_id
   : undefined
 
 const maxQtyRaw = safeQuery(route.query.max_qty)
-const maxQty = maxQtyRaw ? Number(maxQtyRaw) : undefined
+const maxQty = maxQtyRaw && !Number.isNaN(Number(maxQtyRaw)) ? Number(maxQtyRaw) : undefined
 
 async function handleSubmit(input: {
   asset_id: string

@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { MButton, MTile } from '@mozaic-ds/vue'
+import { useRouter } from 'vue-router'
 import { MDataTable } from '@mozaic-ds/datatable-vue'
 import '@mozaic-ds/datatable-vue/style.css'
 import type { PortfolioRow } from '@/types/portfolio'
+
+const router = useRouter()
 
 defineProps<{
   holdings: PortfolioRow[]
@@ -18,6 +21,7 @@ const headers = [
   { label: 'Quantity', value: 'quantity' },
   { label: 'Avg Cost', value: 'average_cost' },
   { label: 'Invested', value: 'total_invested' },
+  { label: '', value: 'actions', sortable: false },
 ]
 
 function formatCurrency(value: number, currency: string) {
@@ -42,7 +46,7 @@ function formatQuantity(value: number) {
       <span class="portfolio-empty__icon">📊</span>
       <h3>No holdings yet</h3>
       <p>Start by adding your first purchase.</p>
-      <MButton variant="primary" @click="$router.push('/buy')">Buy your first asset</MButton>
+      <MButton variant="primary" @click="router.push('/buy')">Buy your first asset</MButton>
     </div>
   </MTile>
 
