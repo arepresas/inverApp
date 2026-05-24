@@ -26,12 +26,16 @@ const maxQtyRaw = safeQuery(route.query.max_qty)
 const maxQty = maxQtyRaw && !Number.isNaN(Number(maxQtyRaw)) ? Number(maxQtyRaw) : undefined
 
 async function handleSubmit(input: {
-  asset_id: string
+  symbol: string
+  name: string
+  asset_type: string
+  currency: string
   transaction_type: 'buy' | 'sell'
   quantity: number
   price_per_unit: number
   fees: number
   transaction_date: string
+  asset_id?: string
 }) {
   await tx.addTransaction(input)
 }

@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { MTextInput, MField } from '@mozaic-ds/vue'
-import { supabase } from '@/lib/supabase'
-import type { Asset } from '@/types/portfolio'
+import { searchAssets } from '@/lib/yahoo'
 
 const emit = defineEmits<{
-  select: [asset: Asset | null]
+  select: [asset: { symbol: string; name: string; asset_type: string; currency: string } | null]
 }>()
 
 const search = ref('')
-const results = ref<Asset[]>([])
+const results = ref<{ symbol: string; name: string; asset_type: string; currency: string }[]>([])
 const loading = ref(false)
-const selected = ref<Asset | null>(null)
+const selected = ref(false)
 const open = ref(false)
 let skipWatch = false
 
@@ -23,32 +22,21 @@ watch(search, (value) => {
     return
   }
   if (selected.value) {
-    selected.value = null
+    selected.value = false
     emit('select', null)
   }
   if (debounce) clearTimeout(debounce)
-  if (!value || value.length < 1) {
+  if (!value || value.length < 2) {
     results.value = []
     return
   }
-  debounce = setTimeout(() => fetchAssets(value), 200)
+  debounce = setTimeout(() => fetchResults(value), 300)
 })
 
-async function fetchAssets(query: string) {
+async function fetchResults(query: string) {
   loading.value = true
-  // Escape LIKE wildcards to prevent unexpected matches
-  const safe = query.replace(/[%_\\]/g, '\\$&')
   try {
-    const { data, error: err } = await supabase
-      .from('assets')
-      .select('id, symbol, name, asset_type, currency')
-      .or(`symbol.ilike.%${safe}%,name.ilike.%${safe}%`)
-      .eq('active', true)
-      .order('symbol')
-      .limit(10)
-
-    if (err) throw err
-    results.value = (data as Asset[]) || []
+    results.value = await searchAssets(query)
   } catch {
     results.value = []
   } finally {
@@ -56,13 +44,13 @@ async function fetchAssets(query: string) {
   }
 }
 
-function selectAsset(asset: Asset) {
+function selectResult(item: (typeof results.value)[0]) {
   skipWatch = true
-  selected.value = asset
-  search.value = `${asset.symbol} — ${asset.name}`
+  selected.value = true
+  search.value = `${item.symbol} — ${item.name}`
   open.value = false
   results.value = []
-  emit('select', asset)
+  emit('select', item)
 }
 
 function handleBlur() {
@@ -87,18 +75,19 @@ function handleBlur() {
 
     <ul v-if="open && results.length" class="asset-search__dropdown">
       <li
-        v-for="asset in results"
-        :key="asset.id"
+        v-for="item in results"
+        :key="item.symbol"
         class="asset-search__option"
-        @mousedown.prevent="selectAsset(asset)"
+        @mousedown.prevent="selectResult(item)"
       >
-        <span class="asset-search__symbol">{{ asset.symbol }}</span>
-        <span class="asset-search__name">{{ asset.name }}</span>
-        <span class="asset-search__type">{{ asset.asset_type }}</span>
+        <span class="asset-search__symbol">{{ item.symbol }}</span>
+        <span class="asset-search__name">{{ item.name }}</span>
+        <span class="asset-search__type">{{ item.asset_type }}</span>
+        <span class="asset-search__currency">{{ item.currency }}</span>
       </li>
     </ul>
 
-    <p v-if="loading" class="asset-search__loading">Searching...</p>
+    <p v-if="loading" class="asset-search__loading">Searching Yahoo Finance...</p>
   </div>
 </template>
 
@@ -163,6 +152,11 @@ function handleBlur() {
   padding: 0.125rem 0.375rem;
   border-radius: 0.25rem;
   background: var(--mu-color-surface-hover, #f1f5f9);
+  color: var(--mu-color-text-secondary, #94a3b8);
+}
+
+.asset-search__currency {
+  font-size: 0.6875rem;
   color: var(--mu-color-text-secondary, #94a3b8);
 }
 
