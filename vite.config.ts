@@ -13,6 +13,8 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // Proxy Yahoo Finance API in dev (CORS workaround).
+      // In production, deploy a real proxy (e.g. Cloudflare Worker, Netlify redirect).
       '/api/yahoo': {
         target: 'https://query2.finance.yahoo.com',
         changeOrigin: true,

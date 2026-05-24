@@ -15,8 +15,10 @@ interface YahooQuote {
   currency?: string
 }
 
-function inferAssetType(quoteType?: string): string {
+function inferAssetType(quoteType?: string): string | null {
   switch (quoteType) {
+    case 'EQUITY':
+      return 'stock'
     case 'CRYPTOCURRENCY':
       return 'crypto'
     case 'ETF':
@@ -26,7 +28,8 @@ function inferAssetType(quoteType?: string): string {
     case 'INDEX':
       return 'etf'
     default:
-      return 'stock'
+      // Filter out non-investable types (currencies, futures, options...)
+      return null
   }
 }
 
@@ -40,11 +43,11 @@ export async function searchAssets(query: string): Promise<YahooResult[]> {
   const quotes: YahooQuote[] = data.quotes || []
 
   return quotes
-    .filter((q) => q.symbol && (q.shortname || q.longname))
+    .filter((q) => q.symbol && (q.shortname || q.longname) && inferAssetType(q.quoteType) !== null)
     .map((q) => ({
       symbol: q.symbol,
       name: q.shortname || q.longname || q.symbol,
-      asset_type: inferAssetType(q.quoteType),
+      asset_type: inferAssetType(q.quoteType)!,
       currency: q.currency || 'USD',
     }))
 }
@@ -52,25 +55,16 @@ export async function searchAssets(query: string): Promise<YahooResult[]> {
 export async function upsertAsset(asset: YahooResult): Promise<Asset> {
   const { supabase } = await import('@/lib/supabase')
 
-  // Check if asset already exists (maybeSingle returns null instead of throwing)
-  const { data: existing } = await supabase
-    .from('assets')
-    .select('id')
-    .eq('symbol', asset.symbol)
-    .maybeSingle()
-
-  if (existing) {
-    return { id: existing.id, ...asset, active: true }
-  }
-
+  // Use upsert to avoid race condition between check and insert
   const { data, error } = await supabase
     .from('assets')
-    .insert({
+    .upsert({
       symbol: asset.symbol,
       name: asset.name,
       asset_type: asset.asset_type,
       currency: asset.currency,
-    })
+      active: true,
+    }, { onConflict: 'symbol' })
     .select('id')
     .single()
 
