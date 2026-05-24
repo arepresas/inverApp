@@ -26,3 +26,7 @@ dist-ssr
 tmp
 .tmp
 .env
+
+# Supabase local state
+supabase/.branches
+supabase/.temp
