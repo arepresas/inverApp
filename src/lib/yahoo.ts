@@ -1,4 +1,3 @@
-import yahooFinance from 'yahoo-finance2'
 import type { Asset } from '@/types/portfolio'
 
 export interface YahooResult {
@@ -6,6 +5,14 @@ export interface YahooResult {
   name: string
   asset_type: string
   currency: string
+}
+
+interface YahooQuote {
+  symbol: string
+  shortname?: string
+  longname?: string
+  quoteType?: string
+  currency?: string
 }
 
 function inferAssetType(quoteType?: string): string {
@@ -24,15 +31,17 @@ function inferAssetType(quoteType?: string): string {
 }
 
 export async function searchAssets(query: string): Promise<YahooResult[]> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const results: any = await yahooFinance.search(query, {
-    quotesCount: 10,
-    newsCount: 0,
-  })
+  const url = `https://query2.finance.yahoo.com/v1/finance/search?q=${encodeURIComponent(query)}&lang=en-US&region=US&quotesCount=10&newsCount=0`
 
-  return (results.quotes || [])
-    .filter((q: any) => q.symbol && q.shortname)
-    .map((q: any) => ({
+  const res = await fetch(url)
+  if (!res.ok) return []
+
+  const data = await res.json()
+  const quotes: YahooQuote[] = data.quotes || []
+
+  return quotes
+    .filter((q) => q.symbol && (q.shortname || q.longname))
+    .map((q) => ({
       symbol: q.symbol,
       name: q.shortname || q.longname || q.symbol,
       asset_type: inferAssetType(q.quoteType),
