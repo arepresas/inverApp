@@ -55,19 +55,32 @@ export async function searchAssets(query: string): Promise<YahooResult[]> {
 export async function upsertAsset(asset: YahooResult): Promise<Asset> {
   const { supabase } = await import('@/lib/supabase')
 
-  // Use upsert to avoid race condition between check and insert
-  const { data, error } = await supabase
+  // Try insert first — new assets get added by the authenticated user
+  const { data: inserted, error: insertErr } = await supabase
     .from('assets')
-    .upsert({
+    .insert({
       symbol: asset.symbol,
       name: asset.name,
       asset_type: asset.asset_type,
       currency: asset.currency,
-      active: true,
-    }, { onConflict: 'symbol' })
+    })
     .select('id')
     .single()
 
-  if (error) throw error
-  return { id: (data as { id: string }).id, ...asset, active: true }
+  if (!insertErr) {
+    return { id: (inserted as { id: string }).id, ...asset, active: true }
+  }
+
+  // If duplicate (already seeded or added by another user), just fetch the existing ID
+  const { data: existing } = await supabase
+    .from('assets')
+    .select('id')
+    .eq('symbol', asset.symbol)
+    .single()
+
+  if (existing) {
+    return { id: existing.id, ...asset, active: true }
+  }
+
+  throw insertErr
 }
