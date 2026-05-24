@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@mozaic-ds/datatable-vue':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@mozaic-ds/vue':
         specifier: ^2.19.0
         version: 2.19.0(postcss@8.5.15)(vue@3.5.34(typescript@6.0.3))
@@ -321,6 +324,9 @@ packages:
 
   '@mozaic-ds/css-dev-tools@1.75.0':
     resolution: {integrity: sha512-2ALimmKIYrhmzBwvndMsglV19Oxss0RfANIRBa74xhaYggpNx4Ibk9OhRfbcRuuc59UGmJiQadLFBwaaVFslfg==}
+
+  '@mozaic-ds/datatable-vue@1.0.1':
+    resolution: {integrity: sha512-uYBniyyY/DVaeZheJF8YHK8GJ9Ah6leItZ/E3ulPz18CctNKSdAcpAiqVayoJmxMc+4ZK+3KWFX1eQxQoXz+fA==}
 
   '@mozaic-ds/postcss-media-queries-packer-on-demand@1.76.1':
     resolution: {integrity: sha512-RzKjLfAFmelfs4JHWQl7m4YZ64zyrZ0d9JloEiv3TeVfI5fjupZALPXelsJ+jHe4214F9+2FhRMTHfJn+0Zhsw==}
@@ -2797,6 +2803,8 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
       - typescript
+
+  '@mozaic-ds/datatable-vue@1.0.1': {}
 
   '@mozaic-ds/postcss-media-queries-packer-on-demand@1.76.1': {}
 
