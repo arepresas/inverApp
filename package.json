@@ -21,6 +21,7 @@
     "db:diff": "supabase db diff -f"
   },
   "dependencies": {
+    "@mozaic-ds/datatable-vue": "^1.0.1",
     "@mozaic-ds/vue": "^2.19.0",
     "@supabase/supabase-js": "^2.106.1",
     "pinia": "^3.0.4",
