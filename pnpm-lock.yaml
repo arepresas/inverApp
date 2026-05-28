@@ -12,8 +12,8 @@ importers:
         specifier: ^1.0.1
         version: 1.0.1
       '@mozaic-ds/vue':
-        specifier: ^2.19.1
-        version: 2.19.1(postcss@8.5.15)(vue@3.5.35(typescript@6.0.3))
+        specifier: ^2.19.0
+        version: 2.19.0(postcss@8.5.15)(vue@3.5.35(typescript@6.0.3))
       '@supabase/supabase-js':
         specifier: ^2.106.2
         version: 2.106.2
@@ -27,8 +27,8 @@ importers:
         specifier: ^3.5.35
         version: 3.5.35(typescript@6.0.3)
       vue-router:
-        specifier: ^5.1.0
-        version: 5.1.0(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(vite@8.0.14(@types/node@25.9.1)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@6.0.3))
+        specifier: ^5.0.7
+        version: 5.0.7(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(vue@3.5.35(typescript@6.0.3))
     devDependencies:
       '@eslint/js':
         specifier: ^10.0.1
@@ -348,8 +348,8 @@ packages:
     engines: {node: '>=20'}
     hasBin: true
 
-  '@mozaic-ds/vue@2.19.1':
-    resolution: {integrity: sha512-IVbljofL8uMhX8+rjuQDm+CK9mYFMXc9rja3cYPNta1AdKyTdpCU7/AMaXYBEpOKwpcp9rjmNN9tZmJabt2gig==}
+  '@mozaic-ds/vue@2.19.0':
+    resolution: {integrity: sha512-v7u9/eoCjDsgFSqe/kyMmt9K9UGZqLDo0dQqTd5Dyxe/Xx9QwUihnqYL+uqMzQnf6N9/j3gExPn9KfNRS6hO5g==}
     peerDependencies:
       vue: ^3.5.13
 
@@ -857,8 +857,8 @@ packages:
     resolution: {integrity: sha512-m1Q/RaVOnTp9JxPX+F+Zn7IcLYMzM8kZofDImfsKZd8MbR+ikdOzTeztStWqfrqIxZnYWryyI9ePm3NGjnZgGw==}
     engines: {node: '>=20.19.0'}
 
-  ast-walker-scope@0.9.0:
-    resolution: {integrity: sha512-IJdzo2vLiElBxKzwS36VsCue/62d6IdWjnPB2v3nuPKeWGynp6FF/CYoLa5i/3jXH/z97ZDdsXz6abpgM6w07A==}
+  ast-walker-scope@0.8.3:
+    resolution: {integrity: sha512-cbdCP0PGOBq0ASG+sjnKIoYkWMKhhz+F/h9pRexUdX2Hd38+WOlBkRKlqkGOSm0YQpcFMQBJeK4WspUAkwsEdg==}
     engines: {node: '>=20.19.0'}
 
   astral-regex@2.0.0:
@@ -2454,13 +2454,12 @@ packages:
     peerDependencies:
       eslint: ^8.57.0 || ^9.0.0 || ^10.0.0
 
-  vue-router@5.1.0:
-    resolution: {integrity: sha512-HAbiLzLEHQwxPgvsbOJDAwtavszEgLwri6XfyrsPECIFez8+59xc9LofWVdc/HEaSRT822lJ8H9Ns38VVond5g==}
+  vue-router@5.0.7:
+    resolution: {integrity: sha512-dqfk8kvRbCutmCOCj/XLDqDEYxc1wBdAOGLuVy5M93ifYMsBd5fIjfaPN4tQAbxr5IprdBDIox1gr4wYyOx/SA==}
     peerDependencies:
       '@pinia/colada': '>=0.21.2'
       '@vue/compiler-sfc': ^3.5.34
       pinia: ^3.0.4
-      vite: ^7.0.0 || ^8.0.0
       vue: ^3.5.34
     peerDependenciesMeta:
       '@pinia/colada':
@@ -2468,8 +2467,6 @@ packages:
       '@vue/compiler-sfc':
         optional: true
       pinia:
-        optional: true
-      vite:
         optional: true
 
   vue-tsc@3.3.2:
@@ -2825,7 +2822,7 @@ snapshots:
 
   '@mozaic-ds/tokens@2.23.0': {}
 
-  '@mozaic-ds/vue@2.19.1(postcss@8.5.15)(vue@3.5.35(typescript@6.0.3))':
+  '@mozaic-ds/vue@2.19.0(postcss@8.5.15)(vue@3.5.35(typescript@6.0.3))':
     dependencies:
       '@mozaic-ds/styles': 2.23.0
       '@mozaic-ds/web-fonts': 1.65.0
@@ -3285,10 +3282,9 @@ snapshots:
       '@babel/parser': 7.29.7
       pathe: 2.0.3
 
-  ast-walker-scope@0.9.0:
+  ast-walker-scope@0.8.3:
     dependencies:
       '@babel/parser': 7.29.7
-      '@babel/types': 7.29.7
       ast-kit: 2.2.0
 
   astral-regex@2.0.0: {}
@@ -4822,12 +4818,12 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  vue-router@5.1.0(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(vite@8.0.14(@types/node@25.9.1)(sass@1.100.0)(yaml@2.9.0))(vue@3.5.35(typescript@6.0.3)):
+  vue-router@5.0.7(@vue/compiler-sfc@3.5.35)(pinia@3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3)))(vue@3.5.35(typescript@6.0.3)):
     dependencies:
       '@babel/generator': 8.0.0-rc.6
       '@vue-macros/common': 3.1.2(vue@3.5.35(typescript@6.0.3))
       '@vue/devtools-api': 8.1.2
-      ast-walker-scope: 0.9.0
+      ast-walker-scope: 0.8.3
       chokidar: 5.0.0
       json5: 2.2.3
       local-pkg: 1.2.1
@@ -4845,7 +4841,6 @@ snapshots:
     optionalDependencies:
       '@vue/compiler-sfc': 3.5.35
       pinia: 3.0.4(typescript@6.0.3)(vue@3.5.35(typescript@6.0.3))
-      vite: 8.0.14(@types/node@25.9.1)(sass@1.100.0)(yaml@2.9.0)
 
   vue-tsc@3.3.2(typescript@6.0.3):
     dependencies:
