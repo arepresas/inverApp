@@ -31,3 +31,16 @@ export interface TransactionInput {
   transaction_date: string
   notes?: string
 }
+
+export interface WatchlistItem {
+  id: string
+  user_id: string
+  asset_id: string
+  symbol: string
+  name: string
+  asset_type: string
+  currency: string
+  created_at: string
+  /** Runtime-only: populated from live price data, not stored */
+  currentPrice?: number | null
+}

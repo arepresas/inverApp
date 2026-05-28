@@ -22,12 +22,12 @@
   },
   "dependencies": {
     "@mozaic-ds/datatable-vue": "^1.0.1",
-    "@mozaic-ds/vue": "^2.19.1",
+    "@mozaic-ds/vue": "^2.19.0",
     "@supabase/supabase-js": "^2.106.2",
     "pinia": "^3.0.4",
     "tslib": "^2.8.1",
     "vue": "^3.5.35",
-    "vue-router": "^5.1.0"
+    "vue-router": "^5.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
