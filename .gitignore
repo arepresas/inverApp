@@ -27,6 +27,9 @@ tmp
 .tmp
 .env
 
+# Playwright MCP traces
+.playwright-mcp
+
 # Supabase local state
 supabase/.branches
 supabase/.temp
