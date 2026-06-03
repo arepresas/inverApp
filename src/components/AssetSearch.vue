@@ -106,41 +106,42 @@ function handleBlur() {
   left: 0;
   right: 0;
   z-index: 50;
-  background: var(--mu-color-surface, #fff);
-  border: 1px solid var(--mu-color-border, #e2e8f0);
-  border-radius: 0.5rem;
-  margin-top: 0.25rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-top: var(--space-1);
   max-height: 16rem;
   overflow-y: auto;
   list-style: none;
-  padding: 0.25rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: var(--space-1);
+  box-shadow: var(--shadow-lg);
 }
 
 .asset-search__option {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 0.375rem;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   transition: background 0.1s;
 }
 
 .asset-search__option:hover {
-  background: var(--mu-color-surface-hover, #f1f5f9);
+  background: var(--color-card-hover);
 }
 
 .asset-search__symbol {
   font-weight: 600;
   font-size: 0.875rem;
   min-width: 4rem;
+  color: var(--color-text);
 }
 
 .asset-search__name {
   flex: 1;
   font-size: 0.8125rem;
-  color: var(--mu-color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -149,20 +150,20 @@ function handleBlur() {
 .asset-search__type {
   font-size: 0.6875rem;
   text-transform: uppercase;
-  padding: 0.125rem 0.375rem;
-  border-radius: 0.25rem;
-  background: var(--mu-color-surface-hover, #f1f5f9);
-  color: var(--mu-color-text-secondary, #94a3b8);
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--color-card-hover);
+  color: var(--color-text-muted);
 }
 
 .asset-search__currency {
   font-size: 0.6875rem;
-  color: var(--mu-color-text-secondary, #94a3b8);
+  color: var(--color-text-muted);
 }
 
 .asset-search__loading {
-  margin-top: 0.5rem;
+  margin-top: var(--space-2);
   font-size: 0.8125rem;
-  color: var(--mu-color-text-secondary, #94a3b8);
+  color: var(--color-text-secondary);
 }
 </style>
