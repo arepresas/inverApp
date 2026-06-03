@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 
 import '@mozaic-ds/vue/style.css'
+import './styles/global.css'
 
 const app = createApp(App)
 

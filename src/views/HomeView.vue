@@ -92,63 +92,66 @@ async function handleLogout() {
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: var(--color-surface);
 }
 
 .landing__hero {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 4rem 1.5rem 3rem;
+  padding: var(--space-12) var(--space-6) var(--space-10);
   text-align: center;
   width: 100%;
   max-width: 32rem;
 }
 
 .landing__logo {
-  font-size: 3.5rem;
-  margin-bottom: 1rem;
+  font-size: 3rem;
+  margin-bottom: var(--space-4);
+  opacity: 0.9;
 }
 
 .landing__title {
   font-size: 2.25rem;
-  font-weight: 800;
-  margin: 0 0 0.5rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  font-weight: 700;
+  margin: 0 0 var(--space-2);
+  background: linear-gradient(135deg, var(--color-primary), #8b5cf6);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.02em;
 }
 
 .landing__subtitle {
   font-size: 1.125rem;
-  color: var(--mu-color-text-secondary, #64748b);
-  margin: 0 0 2rem;
-  line-height: 1.6;
+  color: var(--color-text-secondary);
+  margin: 0 0 var(--space-8);
+  line-height: 1.7;
 }
 
 .landing__card {
   width: 100%;
-  background: var(--mu-color-surface, #fff);
-  border: 1px solid var(--mu-color-border, #e2e8f0);
-  border-radius: 0.75rem;
-  padding: 2rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  box-shadow: var(--shadow-md);
 }
 
 .landing__state {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
-  color: var(--mu-color-text-secondary, #64748b);
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
 }
 
 .landing__spinner {
   width: 1rem;
   height: 1rem;
-  border: 2px solid #e2e8f0;
-  border-top-color: #3b82f6;
-  border-radius: 50%;
+  border: 2px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: var(--radius-full);
   animation: spin 0.6s linear infinite;
 }
 
@@ -157,66 +160,76 @@ async function handleLogout() {
 }
 
 .landing__description {
-  margin: 0 0 1.25rem;
-  color: var(--mu-color-text-secondary, #64748b);
-  line-height: 1.5;
+  margin: 0 0 var(--space-5);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
 }
 
 .landing__welcome {
-  margin: 0 0 1.25rem;
+  margin: 0 0 var(--space-5);
   font-size: 1rem;
+  color: var(--color-text);
 }
 
 .landing__actions {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   justify-content: center;
 }
 
 .landing__error {
-  margin-top: 1rem;
-  color: #ef4444;
+  margin-top: var(--space-4);
+  color: var(--color-danger);
   font-size: 0.8125rem;
 }
 
 .landing__features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-  padding: 2rem 1.5rem;
+  gap: var(--space-6);
+  padding: var(--space-8) var(--space-6);
   max-width: 56rem;
   width: 100%;
 }
 
 .landing__feature {
   text-align: center;
-  padding: 1.5rem;
+  padding: var(--space-6);
 }
 
 .landing__feature-icon {
-  font-size: 2rem;
-  display: block;
-  margin-bottom: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: var(--radius-md);
+  font-size: 1.25rem;
+  margin-bottom: var(--space-4);
 }
+
+.landing__feature:nth-child(1) .landing__feature-icon { background: var(--color-primary-light); }
+.landing__feature:nth-child(2) .landing__feature-icon { background: #fef3c7; }
+.landing__feature:nth-child(3) .landing__feature-icon { background: #f3e8ff; }
 
 .landing__feature h3 {
   font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.375rem;
-  color: var(--mu-color-text, #0f172a);
+  margin: 0 0 var(--space-1);
+  color: var(--color-text);
 }
 
 .landing__feature p {
   font-size: 0.875rem;
-  color: var(--mu-color-text-secondary, #64748b);
+  color: var(--color-text-secondary);
   margin: 0;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .landing__footer {
   margin-top: auto;
-  padding: 1.5rem;
-  color: var(--mu-color-text-secondary, #94a3b8);
+  padding: var(--space-6);
+  color: var(--color-text-muted);
   font-size: 0.8125rem;
 }
 </style>

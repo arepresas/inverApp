@@ -106,44 +106,40 @@ onMounted(async () => {
 
 <style scoped>
 .sparkline {
-  background: var(--mu-color-surface, #fff);
-  border: 1px solid var(--mu-color-border, #e2e8f0);
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
   white-space: nowrap;
   overflow: hidden;
-}
-
-.sparkline--loading {
-  min-height: 40px;
 }
 
 .sparkline__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.375rem 0.5rem;
-  border-bottom: 1px solid var(--mu-color-border, #e2e8f0);
-  background: var(--mu-color-surface-hover, #f8fafc);
+  padding: 6px var(--space-2);
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-card-hover);
 }
 
 .sparkline__symbol {
   font-size: 0.75rem;
   font-weight: 700;
-  color: var(--mu-color-text, #0f172a);
+  color: var(--color-text);
 }
 
 .sparkline__label {
   font-size: 0.625rem;
-  color: var(--mu-color-text-secondary, #94a3b8);
+  color: var(--color-text-muted);
   text-transform: uppercase;
 }
 
 .sparkline__body {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.375rem 0.5rem;
+  gap: var(--space-2);
+  padding: 6px var(--space-2);
 }
 
 .sparkline__svg {
@@ -159,7 +155,7 @@ onMounted(async () => {
 .sparkline__price {
   font-size: 0.8125rem;
   font-weight: 700;
-  color: var(--mu-color-text, #0f172a);
+  color: var(--color-text);
 }
 
 .sparkline__change {

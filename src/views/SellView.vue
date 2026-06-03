@@ -85,12 +85,12 @@ function handleCancel() {
 <style scoped>
 .sell-view {
   min-height: 100vh;
-  background: var(--mu-color-surface, #f8fafc);
+  background: var(--color-surface);
 }
 
 .sell-view__main {
-  max-width: 32rem;
+  max-width: 40rem;
   margin: 0 auto;
-  padding: 2rem 1.5rem;
+  padding: var(--space-6) var(--space-6);
 }
 </style>

@@ -1,0 +1,45 @@
+/* ============================================================
+   InverApp — Shared Component Styles
+   Imported globally for use across all components.
+   ============================================================ */
+
+/* ── Table wrapper ── */
+.table-wrap {
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.pt-empty { margin-top: var(--space-6); }
+.pt-num { white-space: nowrap; }
+
+/* ── P&L text ── */
+.text--gain { color: var(--color-success); font-weight: 600; }
+.text--loss { color: var(--color-danger); font-weight: 600; }
+.text--muted { color: var(--color-text-muted); }
+
+/* ── Empty state ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+}
+.empty-state__icon { font-size: 2rem; opacity: 0.4; }
+.empty-state h3 { margin: 0; font-size: 1rem; font-weight: 600; color: var(--color-text); }
+.empty-state p { margin: 0; font-size: 0.875rem; color: var(--color-text-secondary); max-width: 24ch; }
+
+/* ── Subtle badge ── */
+.badge--subtle {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--color-card-hover);
+  color: var(--color-text-secondary);
+}

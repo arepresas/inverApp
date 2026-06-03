@@ -210,13 +210,14 @@ const total = computed(() => {
 
 <style scoped>
 .tx-form {
-  background: var(--mu-color-surface, #fff);
-  border: 1px solid var(--mu-color-border, #e2e8f0);
-  border-radius: 0.75rem;
-  padding: 1.5rem;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  padding: var(--space-6);
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .tx-form__title {
@@ -234,40 +235,58 @@ const total = computed(() => {
 .tx-form__label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: var(--mu-color-text, #0f172a);
+  color: var(--color-text);
+}
+
+.tx-form__preselected-value {
+  padding: 10px var(--space-3);
+  background: var(--color-card-hover);
+  border-radius: var(--radius-sm);
+  font-size: 0.9375rem;
+}
+
+.tx-form__total {
+  padding: var(--space-3);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.tx-form__error {
+  margin: var(--space-1) 0 0;
+  font-size: 0.75rem;
+  color: var(--color-danger);
 }
 
 .tx-form__preselected {
   display: flex;
   flex-direction: column;
-  gap: 0.375rem;
+  gap: 6px;
 }
 
 .tx-form__preselected-value {
-  padding: 0.625rem 0.75rem;
-  background: var(--mu-color-surface-hover, #f8fafc);
-  border-radius: 0.5rem;
+  padding: 10px var(--space-3);
+  background: var(--color-card-hover);
+  border-radius: var(--radius-sm);
   font-size: 0.9375rem;
 }
 
 .tx-form__total {
-  padding: 0.75rem;
-  background: var(--mu-color-surface-hover, #f8fafc);
-  border-radius: 0.5rem;
+  padding: var(--space-3);
+  background: var(--color-primary-light);
+  border-radius: var(--radius-sm);
   font-size: 1rem;
   font-weight: 600;
   text-align: center;
-}
-
-.tx-form__error {
-  margin: 0.25rem 0 0;
-  font-size: 0.75rem;
-  color: #ef4444;
+  color: var(--color-primary);
 }
 
 .tx-form__actions {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   justify-content: flex-end;
 }
 </style>
