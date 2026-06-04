@@ -4,7 +4,7 @@ defineProps<{ symbol: string }>()
 
 <template>
   <a
-    :href="`https://finance.yahoo.com/quote/${symbol}`"
+    :href="`https://finance.yahoo.com/quote/${encodeURIComponent(symbol)}`"
     target="_blank"
     rel="noopener noreferrer"
     class="symbol-cell__link"

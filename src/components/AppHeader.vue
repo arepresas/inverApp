@@ -37,7 +37,7 @@ function isActive(path: string) {
 
       <MPopover position="bottom" appearance="standard" :pointer="true" size="s" :closable="false">
         <template #activator="{ id }">
-          <button class="app-header__user-btn" :popovertarget="id">
+          <button type="button" class="app-header__user-btn" :popovertarget="id">
             <span class="app-header__avatar">{{ auth.user.email?.[0]?.toUpperCase() }}</span>
             <span class="app-header__email">{{ auth.user.email }}</span>
             <ChevronDown32 class="app-header__chevron" />
@@ -52,7 +52,7 @@ function isActive(path: string) {
             </template>
             Settings
           </MButton>
-          <button class="app-header__menu-item app-header__menu-item--danger" @click="handleLogout">
+          <button type="button" class="app-header__menu-item app-header__menu-item--danger" @click="handleLogout">
             <LogOut32 />
             Sign out
           </button>

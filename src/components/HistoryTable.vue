@@ -85,7 +85,7 @@ const subHeaders = [
               <span class="ex-tag" :class="`ex-tag--${tx.transaction_type}`">{{ tx.transaction_type }}</span>
             </template>
             <template #cell.quantity="{ item: tx }">
-              <span class="ex-num">{{ tx.quantity }}</span>
+              <span class="ex-num">{{ new Intl.NumberFormat(getNumberLocale(), { minimumFractionDigits:0, maximumFractionDigits:8 }).format(tx.quantity) }}</span>
             </template>
             <template #cell.total="{ item: tx }">
               <span class="ex-num">{{ new Intl.NumberFormat(getNumberLocale(), { style:'currency', currency: item.currency, minimumFractionDigits:2 }).format(tx.total) }}</span>
