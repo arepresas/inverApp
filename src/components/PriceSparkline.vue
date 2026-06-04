@@ -18,7 +18,7 @@ const padding = 4
 const viewBox = computed(() => `0 0 ${width} ${height}`)
 
 const points = computed(() => {
-  if (!data.value?.length) return ''
+  if (!data.value?.length || data.value.length < 2) return ''
   const vals = data.value.map((d) => d.close)
   const max = Math.max(...vals)
   const min = Math.min(...vals)

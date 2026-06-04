@@ -56,11 +56,12 @@ async function fetchTransactions(assetId: string) {
   if (transactionsByAsset[assetId] || txLoading[assetId]) return
   txLoading[assetId] = true
   try {
-    const { data } = await supabase
+    const { data, error: fetchError } = await supabase
       .from('transactions')
       .select('id, transaction_type, quantity, price_per_unit, fees, transaction_date')
       .eq('asset_id', assetId)
       .order('transaction_date', { ascending: true })
+    if (fetchError) return
     transactionsByAsset[assetId] = ((data as TxRowDb[]) || []).map((tx) => ({
       ...tx,
       total: tx.quantity * tx.price_per_unit + tx.fees,
