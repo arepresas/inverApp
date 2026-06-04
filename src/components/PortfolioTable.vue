@@ -15,13 +15,17 @@ type EnrichedRow = PortfolioRow & {
   unrealizedPnl: number | null
 }
 
-interface TxRow {
+interface TxRowDb {
   id: string
   transaction_type: 'buy' | 'sell'
   quantity: number
   price_per_unit: number
   fees: number
   transaction_date: string
+}
+
+interface TxRow extends TxRowDb {
+  total: number
 }
 
 const router = useRouter()
@@ -67,7 +71,7 @@ async function fetchTransactions(assetId: string) {
       .select('id, transaction_type, quantity, price_per_unit, fees, transaction_date')
       .eq('asset_id', assetId)
       .order('transaction_date', { ascending: true })
-    transactionsByAsset[assetId] = ((data as TxRow[]) || []).map((tx) => ({
+    transactionsByAsset[assetId] = ((data as TxRowDb[]) || []).map((tx) => ({
       ...tx,
       total: tx.quantity * tx.price_per_unit + tx.fees,
     }))
@@ -76,11 +80,20 @@ async function fetchTransactions(assetId: string) {
   }
 }
 
-// Pre-fetch transactions for all holdings
+function triggerTxFetch(assetId: string): void {
+  void fetchTransactions(assetId)
+}
+
+// Lazy-load transactions when row expands
 watch(
   () => props.holdings,
-  (h) => h.forEach((row) => fetchTransactions(row.asset_id)),
-  { immediate: true },
+  (h) => {
+    // Invalidate any removed holdings
+    const currentIds = new Set(h.map((row) => row.asset_id))
+    for (const id of Object.keys(transactionsByAsset)) {
+      if (!currentIds.has(id)) delete transactionsByAsset[id]
+    }
+  },
 )
 </script>
 
@@ -111,6 +124,7 @@ watch(
         </template>
 
         <template #expandContent="{ item }">
+          {{ triggerTxFetch(item.asset_id) }}
           <div v-if="txLoading[item.asset_id]" class="ex-loading">
             <MLoader size="s" text="Loading transactions..." />
           </div>
@@ -122,7 +136,7 @@ watch(
               size="s"
             >
               <template #cell.transaction_date="{ item: tx }">
-                {{ new Date(tx.transaction_date).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }) }}
+                {{ new Date(tx.transaction_date).toLocaleDateString(getNumberLocale(), { year:'numeric', month:'short', day:'numeric' }) }}
               </template>
               <template #cell.transaction_type="{ item: tx }">
                 <span class="ex-tag" :class="`ex-tag--${tx.transaction_type}`">{{ tx.transaction_type }}</span>

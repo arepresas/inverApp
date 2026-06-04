@@ -42,12 +42,12 @@ function pnlClass(value: number | null) {
   return 'text--muted'
 }
 function formatDate(dateStr: string) {
-  return new Date(dateStr).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+  return new Date(dateStr).toLocaleDateString(getNumberLocale(), { year: 'numeric', month: 'short', day: 'numeric' })
 }
 </script>
 
 <template>
-  <component :is="nested ? 'template' : 'div'" :class="{ 'table-wrap': !nested }">
+  <div :class="{ 'table-wrap': !nested }">
     <slot v-if="!nested" name="before" />
     <MDataTable
       :items="items"
@@ -78,7 +78,7 @@ function formatDate(dateStr: string) {
         <slot :name="name" v-bind="scope || {}" />
       </template>
     </MDataTable>
-  </component>
+  </div>
 </template>
 
 <style>

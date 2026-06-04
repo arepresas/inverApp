@@ -13,6 +13,7 @@ interface HistoryTx {
   fees: number
   transaction_date: string
   pnl: number
+  total: number
 }
 
 interface HistoryAsset {
@@ -78,7 +79,7 @@ const subHeaders = [
             size="s"
           >
             <template #cell.transaction_date="{ item: tx }">
-              {{ new Date(tx.transaction_date).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }) }}
+              {{ new Date(tx.transaction_date).toLocaleDateString(getNumberLocale(), { month:'short', day:'numeric', year:'numeric' }) }}
             </template>
             <template #cell.transaction_type="{ item: tx }">
               <span class="ex-tag" :class="`ex-tag--${tx.transaction_type}`">{{ tx.transaction_type }}</span>

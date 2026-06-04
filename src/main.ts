@@ -6,6 +6,7 @@ import router from './router'
 
 import '@mozaic-ds/vue/style.css'
 import './styles/global.css'
+import './styles/table.css'
 
 const app = createApp(App)
 

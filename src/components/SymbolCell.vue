@@ -14,7 +14,7 @@ defineProps<{ symbol: string }>()
 <style scoped>
 .symbol-cell__link {
   font-weight: 600;
-  color: var(--mu-color-primary, #2563eb);
+  color: var(--color-primary);
   text-decoration: none;
 }
 
