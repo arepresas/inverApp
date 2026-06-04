@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { MPageHeader, MPopover, MButton } from '@mozaic-ds/vue'
 import { Settings32, LogOut32, ChevronDown32 } from '@mozaic-ds/icons-vue'
 import { useAuthStore } from '@/stores/auth'
@@ -8,10 +7,6 @@ import { useRoute, useRouter } from 'vue-router'
 const auth = useAuthStore()
 const route = useRoute()
 const router = useRouter()
-
-onMounted(() => {
-  auth.init()
-})
 
 function goSettings() {
   router.push('/settings')

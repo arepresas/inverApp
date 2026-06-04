@@ -31,7 +31,6 @@ function hidePopup() {
     ref="targetRef"
     class="name-cell"
     tabindex="0"
-    role="button"
     @mouseenter="showPopup"
     @mouseleave="hidePopup"
     @focus="showPopup"
