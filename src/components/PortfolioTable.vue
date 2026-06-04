@@ -1,10 +1,8 @@
 <script setup lang="ts">
 import { reactive, watch } from 'vue'
 import { MButton, MTile, MLoader } from '@mozaic-ds/vue'
-import { MDataTable } from '@mozaic-ds/datatable-vue'
-import '@mozaic-ds/datatable-vue/style.css'
 import DataTable from '@/components/DataTable.vue'
-import { getNumberLocale } from '@/lib/locale'
+import ExpandedTransactions from '@/components/ExpandedTransactions.vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '@/lib/supabase'
 import type { PortfolioRow } from '@/types/portfolio'
@@ -54,14 +52,6 @@ const headers = [
   { label: '', value: 'actions', sortable: false },
 ]
 
-const subHeaders = [
-  { label: 'Date', value: 'transaction_date', render: 'date' as const },
-  { label: 'Type', value: 'transaction_type', render: 'tag' as const },
-  { label: 'Qty', value: 'quantity', render: 'number' as const },
-  { label: 'Price', value: 'price_per_unit', render: 'currency' as const, currencyField: 'currency' },
-  { label: 'Total', value: 'total', render: 'currency' as const, currencyField: 'currency' },
-]
-
 async function fetchTransactions(assetId: string) {
   if (transactionsByAsset[assetId] || txLoading[assetId]) return
   txLoading[assetId] = true
@@ -78,10 +68,6 @@ async function fetchTransactions(assetId: string) {
   } finally {
     txLoading[assetId] = false
   }
-}
-
-function triggerTxFetch(assetId: string): void {
-  void fetchTransactions(assetId)
 }
 
 // Lazy-load transactions when row expands
@@ -124,35 +110,13 @@ watch(
         </template>
 
         <template #expandContent="{ item }">
-          {{ triggerTxFetch(item.asset_id) }}
-          <div v-if="txLoading[item.asset_id]" class="ex-loading">
-            <MLoader size="s" text="Loading transactions..." />
-          </div>
-          <div v-else-if="transactionsByAsset[item.asset_id]?.length">
-            <MDataTable
-              :items="transactionsByAsset[item.asset_id]"
-              :headers="subHeaders"
-              :nested="true"
-              size="s"
-            >
-              <template #cell.transaction_date="{ item: tx }">
-                {{ new Date(tx.transaction_date).toLocaleDateString(getNumberLocale(), { year:'numeric', month:'short', day:'numeric' }) }}
-              </template>
-              <template #cell.transaction_type="{ item: tx }">
-                <span class="ex-tag" :class="`ex-tag--${tx.transaction_type}`">{{ tx.transaction_type }}</span>
-              </template>
-              <template #cell.quantity="{ item: tx }">
-                <span class="ex-num">{{ new Intl.NumberFormat(getNumberLocale(), { minimumFractionDigits:0, maximumFractionDigits:8 }).format(tx.quantity) }}</span>
-              </template>
-              <template #cell.price_per_unit="{ item: tx }">
-                <span class="ex-num">{{ new Intl.NumberFormat(getNumberLocale(), { style:'currency', currency: item.currency, minimumFractionDigits:2, maximumFractionDigits:2 }).format(tx.price_per_unit) }}</span>
-              </template>
-              <template #cell.total="{ item: tx }">
-                <span class="ex-num">{{ new Intl.NumberFormat(getNumberLocale(), { style:'currency', currency: item.currency, minimumFractionDigits:2, maximumFractionDigits:2 }).format(tx.total) }}</span>
-              </template>
-            </MDataTable>
-          </div>
-          <div v-else class="ex-empty">No transactions found.</div>
+          <ExpandedTransactions
+            :asset-id="item.asset_id"
+            :currency="item.currency"
+            :transactions="transactionsByAsset[item.asset_id]"
+            :loading="txLoading[item.asset_id]"
+            :fetch-transactions="fetchTransactions"
+          />
         </template>
     </DataTable>
   </div>

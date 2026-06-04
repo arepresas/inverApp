@@ -8,7 +8,7 @@ const hovered = ref(false)
 const targetRef = ref<HTMLElement | null>(null)
 const popupStyle = ref<Record<string, string>>({})
 
-function onEnter() {
+function showPopup() {
   if (!targetRef.value) return
   const rect = targetRef.value.getBoundingClientRect()
   popupStyle.value = {
@@ -21,7 +21,7 @@ function onEnter() {
   hovered.value = true
 }
 
-function onLeave() {
+function hidePopup() {
   hovered.value = false
 }
 </script>
@@ -30,8 +30,13 @@ function onLeave() {
   <span
     ref="targetRef"
     class="name-cell"
-    @mouseenter="onEnter"
-    @mouseleave="onLeave"
+    tabindex="0"
+    role="button"
+    @mouseenter="showPopup"
+    @mouseleave="hidePopup"
+    @focus="showPopup"
+    @blur="hidePopup"
+    @keydown.escape="hidePopup"
   >{{ name }}</span>
   <Teleport to="body">
     <div v-if="hovered" :style="popupStyle" class="name-cell__popup">
@@ -43,6 +48,13 @@ function onLeave() {
 <style scoped>
 .name-cell {
   cursor: default;
+  outline: none;
+}
+
+.name-cell:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 .name-cell__popup {

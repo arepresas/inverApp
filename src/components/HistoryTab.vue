@@ -40,7 +40,11 @@ async function fetchHistory() {
   try {
     const user = (await supabase.auth.getUser()).data.user
     if (!user) return
-    const { data } = await supabase.rpc('get_transaction_history', { p_user_id: user.id })
+    const { data, error: rpcError } = await supabase.rpc('get_transaction_history', { p_user_id: user.id })
+    if (rpcError) {
+      error.value = rpcError.message
+      return
+    }
     if (!data) { assets.value = []; return }
 
     const rows = data as any[]
@@ -92,6 +96,20 @@ async function fetchHistory() {
 
 <template>
   <div class="tab">
+    <div v-if="error" class="tab__error">
+      Failed to load history: {{ error }}
+    </div>
     <HistoryTable :assets="assets" :transactions="transactions" :loading="loading" />
   </div>
 </template>
+
+<style scoped>
+.tab__error {
+  padding: var(--space-4);
+  margin-bottom: var(--space-4);
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+}
+</style>
