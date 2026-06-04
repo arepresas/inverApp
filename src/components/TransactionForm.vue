@@ -267,23 +267,6 @@ const total = computed(() => {
   gap: 6px;
 }
 
-.tx-form__preselected-value {
-  padding: 10px var(--space-3);
-  background: var(--color-card-hover);
-  border-radius: var(--radius-sm);
-  font-size: 0.9375rem;
-}
-
-.tx-form__total {
-  padding: var(--space-3);
-  background: var(--color-primary-light);
-  border-radius: var(--radius-sm);
-  font-size: 1rem;
-  font-weight: 600;
-  text-align: center;
-  color: var(--color-primary);
-}
-
 .tx-form__actions {
   display: flex;
   gap: var(--space-3);

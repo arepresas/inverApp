@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { MButton, MTile } from '@mozaic-ds/vue'
+import { MButton, MTile, MLoader } from '@mozaic-ds/vue'
 import DataTable from '@/components/DataTable.vue'
 
 interface WatchlistRow {

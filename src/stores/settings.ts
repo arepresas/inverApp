@@ -65,10 +65,17 @@ export const useSettingsStore = defineStore('settings', () => {
     loading.value = true
     error.value = null
 
+    const userId = (await supabase.auth.getUser()).data.user?.id
+    if (!userId) {
+      error.value = 'Not authenticated'
+      loading.value = false
+      return
+    }
+
     const { error: err } = await supabase
       .from('profiles')
       .update({ country: code })
-      .eq('id', (await supabase.auth.getUser()).data.user?.id ?? '')
+      .eq('id', userId)
       .select()
 
     if (err) {

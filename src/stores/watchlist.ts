@@ -72,6 +72,7 @@ export const useWatchlistStore = defineStore('watchlist', () => {
         // 23505 = unique violation → already on watchlist, silently ignore
         if (String(insertErr.code) === '23505' || insertErr.message?.includes('duplicate')) {
           await fetchWatchlist()
+          await fetchWatchlistPrices()
           return
         }
         error.value = insertErr.message
@@ -79,6 +80,7 @@ export const useWatchlistStore = defineStore('watchlist', () => {
       }
 
       await fetchWatchlist()
+      await fetchWatchlistPrices()
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to add to watchlist'
     }
@@ -99,6 +101,7 @@ export const useWatchlistStore = defineStore('watchlist', () => {
       }
 
       await fetchWatchlist()
+      await fetchWatchlistPrices()
     } catch (e) {
       error.value = e instanceof Error ? e.message : 'Failed to remove from watchlist'
     }
