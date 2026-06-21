@@ -467,6 +467,27 @@ pnpm run test    # Must pass
 ### Supabase 2026 GRANT change
 - Migration `20250530120000_explicit_grants.sql` adds explicit GRANTs for all tables. New projects after May 30, 2026 require this.
 
+## For AI Agents
+
+This repo ships project-specific context for AI coding agents (Claude Code, OpenCode, etc.):
+
+- **[AGENTS.md](./AGENTS.md)** — compact resume (load first, ~200 lines)
+- **[.opencode/context/project/](./.opencode/context/project/)** — deep knowledge base:
+  - `navigation.md` — entry point, routes to the right file
+  - `architecture.md` — module map, data flow
+  - `data-model.md` — tables, RLS, PPC cost basis, migration conventions
+  - `state-stores.md` — 5 Pinia stores with field + action maps
+  - `api-integration.md` — Supabase + Yahoo Finance internals
+  - `routing-views.md` — routes, view→store→component wiring
+  - `conventions.md` — Vue/TS style, naming, commit format
+  - `ui-system.md` — Mozaic components, CSS tokens
+  - `feature-history.md` — build arc, prior sessions
+  - `gotchas.md` — real traps (Mozaic props, Sass wrapper, RLS, etc.)
+
+**Load order**: `conventions.md` (always) + task-relevant file + skim `gotchas.md` before writing code.
+
+**Maintenance**: update `feature-history.md` after features, bump the `Updated:` date on changed ctx files, add new pitfalls to `gotchas.md`.
+
 ## License
 
 Private — all rights reserved.
